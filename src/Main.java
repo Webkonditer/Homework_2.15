@@ -17,8 +17,8 @@ public class Main {
         stringList.add("10");
         stringList.add("11");
         stringList.add("12");
-        System.out.println(stringList.contains("90"));
-        System.out.println(stringList.contains("111"));
+        System.out.println(stringList.contains("88"));
+        System.out.println(stringList.contains("4"));
 
 //        stringList.set(12, "22");
 //        stringList.add("13");
