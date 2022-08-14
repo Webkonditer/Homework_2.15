@@ -18,9 +18,9 @@ public class StringListImpl implements StringList {
         this.arraySize = 0;
     }
 
-    private void checkArrayLengght(){
+    private void grow(){
         if(array[lenght - 1] != null){
-            lenght += 10;
+            lenght = lenght + lenght/2;
             Integer[] newArray = new Integer[lenght];
             System.arraycopy(array, 0, newArray, 0, array.length);
             array = newArray;
@@ -52,7 +52,7 @@ public class StringListImpl implements StringList {
     @Override
     public String add(String item) {
         checkParametr(item);
-        checkArrayLengght();
+        grow();
         array[size()] = Integer.parseInt(item);
         System.out.println(Arrays.toString(array));
         return item;
@@ -62,7 +62,7 @@ public class StringListImpl implements StringList {
     public String add(int index, String item) {
         checkParametr(item);
         checkParametr(index);
-        checkArrayLengght();
+        grow();
         Integer[] newArray = new Integer[lenght];
         System.arraycopy(array, 0, newArray, 0, index);
         newArray[index] = Integer.parseInt(item);
@@ -107,7 +107,7 @@ public class StringListImpl implements StringList {
     @Override
     public boolean contains(String item) {
         checkParametr(item);
-        this.sort();
+        this.quickSort(this.array, 0, this.size() - 1);
         return this.binareSearch(item);
     }
 
@@ -186,23 +186,35 @@ public class StringListImpl implements StringList {
         return newArray;
     }
 
-//    private static void swapElements(Integer[] arr, int indexA, int indexB) {
-//        int tmp = arr[indexA];
-//        arr[indexA] = arr[indexB];
-//        arr[indexB] = tmp;
-//    }
+    public void quickSort(Integer[] arr, int begin, int end) {
+        if (begin < end) {
+            int partitionIndex = partition(arr, begin, end);
 
-    private void sort(){
-        for (int i = 1; i < this.size(); i++) {
-            int temp = array[i];
-            int j = i;
-            while (j > 0 && array[j - 1] >= temp) {
-                array[j] = array[j - 1];
-                j--;
-            }
-            array[j] = temp;
+            quickSort(arr, begin, partitionIndex - 1);
+            quickSort(arr, partitionIndex + 1, end);
         }
-        System.out.println(Arrays.toString(array));
+    }
+
+    private int partition(Integer[] arr, int begin, int end) {
+        int pivot = arr[end];
+        int i = (begin - 1);
+
+        for (int j = begin; j < end; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+
+                swapElements(arr, i, j);
+            }
+        }
+
+        swapElements(arr, i + 1, end);
+        return i + 1;
+    }
+
+    private void swapElements(Integer[] arr, int left, int right) {
+        int temp = arr[left];
+        arr[left] = arr[right];
+        arr[right] = temp;
     }
 
     private boolean binareSearch(String element) {
